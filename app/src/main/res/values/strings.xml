@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">NewsTrending</string>
+    <string name="app_name">News Trending</string>
+    <string name="top_headlines">Top Headlines</string>
+    <string name="news_service">News Service</string>
 </resources>

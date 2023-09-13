@@ -3,6 +3,7 @@ package com.example.newstrending.di.module
 import android.content.Context
 import com.example.newstrending.NewsTrendingApplication
 import com.example.newstrending.data.api.NetworkService
+import com.example.newstrending.data.repository.TopHeadlineRepository
 import com.example.newstrending.di.ApplicationContext
 import com.example.newstrending.di.BaseUrl
 import dagger.Module
@@ -40,6 +41,4 @@ class ApplicationModule(private val application: NewsTrendingApplication) {
             .build()
             .create(NetworkService::class.java)
     }
-
-
 }

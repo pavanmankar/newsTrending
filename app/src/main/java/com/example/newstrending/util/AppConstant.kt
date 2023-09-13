@@ -1,4 +1,8 @@
 package com.example.newstrending.util
 
-class AppConstant {
+import com.example.newstrending.BuildConfig
+
+object AppConstant {
+
+
 }
