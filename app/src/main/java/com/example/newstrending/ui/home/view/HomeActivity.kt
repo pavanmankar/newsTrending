@@ -31,7 +31,6 @@ class HomeActivity : AppCompatActivity() {
         binding.clTopHeadline.setOnClickListener {
             val intent = Intent(this, TopHeadlineActivity::class.java)
             startActivity(intent)
-            Toast.makeText(this, "Top Headlines", Toast.LENGTH_SHORT).show()
         }
 
         binding.clNewsService.setOnClickListener {

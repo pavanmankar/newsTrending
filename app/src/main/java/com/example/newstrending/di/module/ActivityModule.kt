@@ -7,6 +7,8 @@ import com.example.newstrending.data.repository.TopHeadlineRepository
 import com.example.newstrending.di.ActivityContext
 import com.example.newstrending.ui.base.ViewModelProviderFactory
 import com.example.newstrending.ui.home.viewmodel.HomeViewModel
+import com.example.newstrending.ui.topheadline.view.PagingTopHeadlineAdapter
+import com.example.newstrending.ui.topheadline.view.TopHeadlineAdapter
 import com.example.newstrending.ui.topheadline.viewmodel.TopHeadlineViewModel
 import dagger.Module
 import dagger.Provides
@@ -35,5 +37,12 @@ class ActivityModule(private val activity:AppCompatActivity) {
             TopHeadlineViewModel(topHeadlineRepository)
         })[TopHeadlineViewModel::class.java]
     }
+
+    @Provides
+    fun provideTopHeadlineAdapter() = TopHeadlineAdapter(ArrayList())
+
+    @Provides
+    fun providePagingTopHeadlineAdapter() = PagingTopHeadlineAdapter(ArrayList())
+
 
 }

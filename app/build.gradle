@@ -65,6 +65,9 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:2.42"
     implementation 'androidx.browser:browser:1.4.0'
 
+    def paging_version = "3.1.1"
+    implementation "androidx.paging:paging-runtime:$paging_version"
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

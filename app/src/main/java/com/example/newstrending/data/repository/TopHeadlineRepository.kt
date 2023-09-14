@@ -1,7 +1,11 @@
 package com.example.newstrending.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.liveData
 import com.example.newstrending.data.api.NetworkService
 import com.example.newstrending.data.model.Article
+import com.example.newstrending.ui.base.PaggingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -21,5 +25,19 @@ class TopHeadlineRepository @Inject constructor(private val networkService: Netw
             it.articles
         }.flowOn(Dispatchers.Default)
     }
+
+    fun loadData(country : String) : Flow<List<Article>> {
+        return flow<List<Article>> {
+            Pager(
+                config = PagingConfig(pageSize = 10, maxSize = 100),
+                pagingSourceFactory = { PaggingSource(networkService,country) }
+            )
+        }
+    }
+
+    fun getQuotes(country: String) = Pager(
+        config = PagingConfig(pageSize = 10, maxSize = 100),
+        pagingSourceFactory = { PaggingSource(networkService,country) }
+    ).flow
 
 }
