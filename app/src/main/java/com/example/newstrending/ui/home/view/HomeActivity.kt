@@ -10,6 +10,7 @@ import com.example.newstrending.databinding.ActivityMainBinding
 import com.example.newstrending.di.component.DaggerActivityComponent
 import com.example.newstrending.di.module.ActivityModule
 import com.example.newstrending.ui.home.viewmodel.HomeViewModel
+import com.example.newstrending.ui.newsource.view.NewSourceActivity
 import com.example.newstrending.ui.topheadline.view.TopHeadlineActivity
 import javax.inject.Inject
 
@@ -29,12 +30,13 @@ class HomeActivity : AppCompatActivity() {
 
     private fun handleClickEvent() {
         binding.clTopHeadline.setOnClickListener {
-            val intent = Intent(this, TopHeadlineActivity::class.java)
+            val intent = TopHeadlineActivity.getIntent(this)
             startActivity(intent)
         }
 
         binding.clNewsService.setOnClickListener {
-            Toast.makeText(this, "News Service", Toast.LENGTH_SHORT).show()
+            val intent = NewSourceActivity.getIntent(this)
+            startActivity(intent)
         }
 
         binding.clCountries.setOnClickListener {

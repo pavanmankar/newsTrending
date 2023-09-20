@@ -6,6 +6,8 @@ import com.example.newstrending.di.module.ActivityModule
 import com.example.newstrending.di.module.ApplicationModule
 import com.example.newstrending.ui.home.view.HomeActivity
 import com.example.newstrending.ui.home.viewmodel.HomeViewModel
+import com.example.newstrending.ui.newsource.view.NewSourceActivity
+import com.example.newstrending.ui.newsource.view.SourceDetailActivity
 import com.example.newstrending.ui.topheadline.view.TopHeadlineActivity
 import dagger.Component
 import javax.inject.Singleton
@@ -17,6 +19,10 @@ interface ActivityComponent {
     fun injectHomeActivity(activity: HomeActivity)
 
     fun injectTopHeadlineActivity(activity: TopHeadlineActivity)
+
+    fun injectNewSorceActivity(activity: NewSourceActivity)
+
+    fun injectSourceDetailActivity(activity: SourceDetailActivity)
 
 
 }
