@@ -8,7 +8,6 @@ import com.example.newstrending.ui.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class TopHeadlineViewModel(private val topHeadlineRepository: TopHeadlineRepository) : ViewModel() {
@@ -18,13 +17,9 @@ class TopHeadlineViewModel(private val topHeadlineRepository: TopHeadlineReposit
 
     val uiState: StateFlow<UiState<List<Article>>> = _uiState
 
-    init {
-        getTopHeadlineData()
-    }
-
-    private fun getTopHeadlineData() {
+    fun getTopHeadlineData(countryCode: String) {
         viewModelScope.launch {
-            topHeadlineRepository.getTopHeadlines("IN")
+            topHeadlineRepository.getTopHeadlines(countryCode)
                 .catch { error ->
                     _uiState.value = UiState.Error(error.toString())
                 }

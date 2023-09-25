@@ -4,6 +4,7 @@ import android.app.Activity
 import com.example.newstrending.di.ActivityScope
 import com.example.newstrending.di.module.ActivityModule
 import com.example.newstrending.di.module.ApplicationModule
+import com.example.newstrending.ui.country.view.CountryListActivity
 import com.example.newstrending.ui.home.view.HomeActivity
 import com.example.newstrending.ui.home.viewmodel.HomeViewModel
 import com.example.newstrending.ui.newsource.view.NewSourceActivity
@@ -23,6 +24,8 @@ interface ActivityComponent {
     fun injectNewSorceActivity(activity: NewSourceActivity)
 
     fun injectSourceDetailActivity(activity: SourceDetailActivity)
+
+    fun injectCountryListActivity(activity: CountryListActivity)
 
 
 }

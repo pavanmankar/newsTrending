@@ -6,10 +6,8 @@ import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.newstrending.data.model.Article
 import com.example.newstrending.data.model.NewSource
 import com.example.newstrending.databinding.TopHeadlineItemLayoutBinding
-import com.example.newstrending.ui.topheadline.view.TopHeadlineAdapter
 
 class SourceHeadlineAdapter(
     private val articleList: ArrayList<NewSource>

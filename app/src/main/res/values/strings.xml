@@ -2,4 +2,7 @@
     <string name="app_name">News Trending</string>
     <string name="top_headlines">Top Headlines</string>
     <string name="news_service">News Sources</string>
+    <string name="countries">Countries</string>
+    <string name="languages">Languages</string>
+    <string name="search">Search</string>
 </resources>

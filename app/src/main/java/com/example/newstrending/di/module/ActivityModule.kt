@@ -1,5 +1,6 @@
 package com.example.newstrending.di.module
 
+import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -7,6 +8,8 @@ import com.example.newstrending.data.repository.NewSourceRepository
 import com.example.newstrending.data.repository.TopHeadlineRepository
 import com.example.newstrending.di.ActivityContext
 import com.example.newstrending.ui.base.ViewModelProviderFactory
+import com.example.newstrending.ui.country.view.CountryListAdapter
+import com.example.newstrending.ui.country.viewmodel.CountryViewModel
 import com.example.newstrending.ui.home.viewmodel.HomeViewModel
 import com.example.newstrending.ui.newsource.view.NewsourceAdapter
 import com.example.newstrending.ui.newsource.view.SourceHeadlineAdapter
@@ -51,6 +54,14 @@ class ActivityModule(private val activity:AppCompatActivity) {
     }
 
     @Provides
+    fun provideCountryViewModel() : CountryViewModel{
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(CountryViewModel::class){
+                CountryViewModel()
+            })[CountryViewModel::class.java]
+    }
+
+    @Provides
     fun provideTopHeadlineAdapter() = TopHeadlineAdapter(ArrayList())
 
     @Provides
@@ -61,6 +72,9 @@ class ActivityModule(private val activity:AppCompatActivity) {
 
     @Provides
     fun provideSourceHeadlineAdapter() = SourceHeadlineAdapter(ArrayList())
+
+    @Provides
+    fun provideCountryListAdapter() = CountryListAdapter(ArrayList())
 
 
 }

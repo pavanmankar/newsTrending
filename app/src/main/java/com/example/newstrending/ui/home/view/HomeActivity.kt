@@ -9,6 +9,7 @@ import com.example.newstrending.R
 import com.example.newstrending.databinding.ActivityMainBinding
 import com.example.newstrending.di.component.DaggerActivityComponent
 import com.example.newstrending.di.module.ActivityModule
+import com.example.newstrending.ui.country.view.CountryListActivity
 import com.example.newstrending.ui.home.viewmodel.HomeViewModel
 import com.example.newstrending.ui.newsource.view.NewSourceActivity
 import com.example.newstrending.ui.topheadline.view.TopHeadlineActivity
@@ -30,7 +31,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun handleClickEvent() {
         binding.clTopHeadline.setOnClickListener {
-            val intent = TopHeadlineActivity.getIntent(this)
+            val intent = TopHeadlineActivity.getIntent(this,"IN")
             startActivity(intent)
         }
 
@@ -40,7 +41,8 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.clCountries.setOnClickListener {
-            Toast.makeText(this, "Countries", Toast.LENGTH_SHORT).show()
+            val intent = CountryListActivity.getIntent(this)
+            startActivity(intent)
         }
     }
 
