@@ -11,6 +11,7 @@ import com.example.newstrending.di.component.DaggerActivityComponent
 import com.example.newstrending.di.module.ActivityModule
 import com.example.newstrending.ui.country.view.CountryListActivity
 import com.example.newstrending.ui.home.viewmodel.HomeViewModel
+import com.example.newstrending.ui.language.view.LanguageActivity
 import com.example.newstrending.ui.newsource.view.NewSourceActivity
 import com.example.newstrending.ui.topheadline.view.TopHeadlineActivity
 import javax.inject.Inject
@@ -42,6 +43,11 @@ class HomeActivity : AppCompatActivity() {
 
         binding.clCountries.setOnClickListener {
             val intent = CountryListActivity.getIntent(this)
+            startActivity(intent)
+        }
+
+        binding.clLanguage.setOnClickListener {
+            val intent = LanguageActivity.getIntent(this)
             startActivity(intent)
         }
     }

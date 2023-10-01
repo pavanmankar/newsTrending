@@ -18,5 +18,5 @@ interface NetworkService {
 
     @Headers("X-Api-Key: ${BuildConfig.MY_API_KEY}")
     @GET("top-headlines/sources")
-    suspend fun getNewSources(@Query("category") category : String) : NewSourceResponse
+    suspend fun getNewSources(@Query("category") category : String,@Query("language") language : String) : NewSourceResponse
 }

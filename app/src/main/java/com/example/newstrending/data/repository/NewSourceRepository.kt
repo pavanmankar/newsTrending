@@ -14,9 +14,9 @@ import javax.inject.Singleton
 @Singleton
 class NewSourceRepository @Inject constructor(private val networkService: NetworkService) {
 
-    fun getNewSources(category:String): Flow<List<NewSource>> {
+    fun getNewSources(category:String,languageCode:String): Flow<List<NewSource>> {
         return flow {
-            emit(networkService.getNewSources(category))
+            emit(networkService.getNewSources(category,languageCode))
         }.map {
             it.sources
         }.flowOn(Dispatchers.Default)

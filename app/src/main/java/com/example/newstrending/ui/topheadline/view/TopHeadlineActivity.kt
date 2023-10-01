@@ -66,12 +66,6 @@ class TopHeadlineActivity : AppCompatActivity() {
     private fun setupUI() {
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                recyclerView.context,
-                (recyclerView.layoutManager as LinearLayoutManager).orientation
-            )
-        )
         recyclerView.adapter = adapter
     }
 

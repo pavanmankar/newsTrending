@@ -7,6 +7,7 @@ import com.example.newstrending.di.module.ApplicationModule
 import com.example.newstrending.ui.country.view.CountryListActivity
 import com.example.newstrending.ui.home.view.HomeActivity
 import com.example.newstrending.ui.home.viewmodel.HomeViewModel
+import com.example.newstrending.ui.language.view.LanguageActivity
 import com.example.newstrending.ui.newsource.view.NewSourceActivity
 import com.example.newstrending.ui.newsource.view.SourceDetailActivity
 import com.example.newstrending.ui.topheadline.view.TopHeadlineActivity
@@ -26,6 +27,8 @@ interface ActivityComponent {
     fun injectSourceDetailActivity(activity: SourceDetailActivity)
 
     fun injectCountryListActivity(activity: CountryListActivity)
+
+    fun injectLanguageActivity(activity: LanguageActivity)
 
 
 }

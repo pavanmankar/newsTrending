@@ -11,6 +11,8 @@ import com.example.newstrending.ui.base.ViewModelProviderFactory
 import com.example.newstrending.ui.country.view.CountryListAdapter
 import com.example.newstrending.ui.country.viewmodel.CountryViewModel
 import com.example.newstrending.ui.home.viewmodel.HomeViewModel
+import com.example.newstrending.ui.language.view.LanguageListAdapter
+import com.example.newstrending.ui.language.viewmodel.LanguageViewModel
 import com.example.newstrending.ui.newsource.view.NewsourceAdapter
 import com.example.newstrending.ui.newsource.view.SourceHeadlineAdapter
 import com.example.newstrending.ui.newsource.viewmodel.NewSourceViewModel
@@ -62,6 +64,14 @@ class ActivityModule(private val activity:AppCompatActivity) {
     }
 
     @Provides
+    fun provideLanguageViewModel() : LanguageViewModel{
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(LanguageViewModel::class){
+                LanguageViewModel()
+            })[LanguageViewModel::class.java]
+    }
+
+    @Provides
     fun provideTopHeadlineAdapter() = TopHeadlineAdapter(ArrayList())
 
     @Provides
@@ -75,6 +85,9 @@ class ActivityModule(private val activity:AppCompatActivity) {
 
     @Provides
     fun provideCountryListAdapter() = CountryListAdapter(ArrayList())
+
+    @Provides
+    fun provideLanguageListAdapter() = LanguageListAdapter(ArrayList())
 
 
 }

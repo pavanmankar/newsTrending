@@ -62,10 +62,10 @@ class NewSourceActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         adapter.itemClickListener = {
-            val intent = SourceDetailActivity.getIntent(this, it.category, it.name)
+            val intent = SourceDetailActivity.getIntent(this, it.category, it.name,"")
             startActivity(intent)
         }
-        newSourceViewModel.fetchNewSources("")
+        newSourceViewModel.fetchNewSources("", "")
     }
 
     private fun setupObserver() {

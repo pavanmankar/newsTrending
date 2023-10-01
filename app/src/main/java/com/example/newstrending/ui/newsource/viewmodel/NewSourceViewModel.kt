@@ -18,9 +18,9 @@ class NewSourceViewModel(private val newSourceRepository: NewSourceRepository) :
     var category = ""
 
 
-    fun fetchNewSources(category: String) {
+    fun fetchNewSources(category: String,langaueCode : String) {
         viewModelScope.launch {
-            newSourceRepository.getNewSources(category)
+            newSourceRepository.getNewSources(category,langaueCode)
                 .catch {
                     _uiState.value = UiState.Error(it.toString())
                 }
