@@ -1,15 +1,15 @@
 package com.example.newstrending.di.module
 
 import android.content.Context
+import com.example.newstrending.BuildConfig
 import com.example.newstrending.NewsTrendingApplication
-import com.example.newstrending.data.api.LogInterceptor
 import com.example.newstrending.data.api.NetworkService
-import com.example.newstrending.data.repository.TopHeadlineRepository
 import com.example.newstrending.di.ApplicationContext
 import com.example.newstrending.di.BaseUrl
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -33,10 +33,22 @@ class ApplicationModule(private val application: NewsTrendingApplication) {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient {
+    fun provideHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         val builder = OkHttpClient().newBuilder()
-            .addInterceptor(LogInterceptor())
+            .addInterceptor(httpLoggingInterceptor)
         return builder.build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        if (BuildConfig.DEBUG) {
+            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        } else {
+            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.NONE
+        }
+        return httpLoggingInterceptor
     }
 
     @Singleton

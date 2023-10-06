@@ -49,6 +49,7 @@ class TopHeadlineAdapter(
         holder.bind(articleList[position])
 
     fun addData(list: List<Article>) {
+        articleList.clear()
         articleList.addAll(list)
     }
 

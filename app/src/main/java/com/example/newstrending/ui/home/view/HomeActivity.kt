@@ -13,6 +13,7 @@ import com.example.newstrending.ui.country.view.CountryListActivity
 import com.example.newstrending.ui.home.viewmodel.HomeViewModel
 import com.example.newstrending.ui.language.view.LanguageActivity
 import com.example.newstrending.ui.newsource.view.NewSourceActivity
+import com.example.newstrending.ui.search.view.SearchActivity
 import com.example.newstrending.ui.topheadline.view.TopHeadlineActivity
 import javax.inject.Inject
 
@@ -48,6 +49,11 @@ class HomeActivity : AppCompatActivity() {
 
         binding.clLanguage.setOnClickListener {
             val intent = LanguageActivity.getIntent(this)
+            startActivity(intent)
+        }
+
+        binding.clSearch.setOnClickListener {
+            val intent = SearchActivity.getIntent(this)
             startActivity(intent)
         }
     }

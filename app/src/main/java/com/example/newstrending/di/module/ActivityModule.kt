@@ -16,6 +16,7 @@ import com.example.newstrending.ui.language.viewmodel.LanguageViewModel
 import com.example.newstrending.ui.newsource.view.NewsourceAdapter
 import com.example.newstrending.ui.newsource.view.SourceHeadlineAdapter
 import com.example.newstrending.ui.newsource.viewmodel.NewSourceViewModel
+import com.example.newstrending.ui.search.viewmodel.SearchViewModel
 import com.example.newstrending.ui.topheadline.view.PagingTopHeadlineAdapter
 import com.example.newstrending.ui.topheadline.view.TopHeadlineAdapter
 import com.example.newstrending.ui.topheadline.viewmodel.TopHeadlineViewModel
@@ -70,6 +71,15 @@ class ActivityModule(private val activity:AppCompatActivity) {
                 LanguageViewModel()
             })[LanguageViewModel::class.java]
     }
+
+    @Provides
+    fun provideSearchViewModel(topHeadlineRepository: TopHeadlineRepository) : SearchViewModel{
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(SearchViewModel::class){
+                SearchViewModel(topHeadlineRepository)
+            })[SearchViewModel::class.java]
+    }
+
 
     @Provides
     fun provideTopHeadlineAdapter() = TopHeadlineAdapter(ArrayList())

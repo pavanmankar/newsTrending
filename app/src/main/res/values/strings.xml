@@ -5,4 +5,8 @@
     <string name="countries">Countries</string>
     <string name="languages">Languages</string>
     <string name="search">Search</string>
+    <string name="search_news">Search News</string>
+    <string name="try_again">Try Again</string>
+    <string name="oppes">Oppes,</string>
+    <string name="something_went_wrong_please_try_gaian">Something went wrong please try gaian.</string>
 </resources>

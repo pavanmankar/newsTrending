@@ -10,6 +10,7 @@ import com.example.newstrending.ui.home.viewmodel.HomeViewModel
 import com.example.newstrending.ui.language.view.LanguageActivity
 import com.example.newstrending.ui.newsource.view.NewSourceActivity
 import com.example.newstrending.ui.newsource.view.SourceDetailActivity
+import com.example.newstrending.ui.search.view.SearchActivity
 import com.example.newstrending.ui.topheadline.view.TopHeadlineActivity
 import dagger.Component
 import javax.inject.Singleton
@@ -29,6 +30,8 @@ interface ActivityComponent {
     fun injectCountryListActivity(activity: CountryListActivity)
 
     fun injectLanguageActivity(activity: LanguageActivity)
+
+    fun injectSearchActivity(activity: SearchActivity)
 
 
 }

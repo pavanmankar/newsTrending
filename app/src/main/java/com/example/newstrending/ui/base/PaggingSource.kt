@@ -12,7 +12,7 @@ class PaggingSource(private val networkService: NetworkService, private val coun
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
         return try {
             val position = params.key ?: 1
-            val response = networkService.getTopHeadlines(country)
+            val response = networkService.getTopHeadlines(country,"")
             val page = response.totalResults % 10
             var pageCount = 0
             if (page > 0) {

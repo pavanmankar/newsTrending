@@ -1,4 +1,4 @@
-package com.example.newstrending.ui.topheadline.viewmodel
+package com.example.newstrending.ui.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,16 +10,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class TopHeadlineViewModel(private val topHeadlineRepository: TopHeadlineRepository) : ViewModel() {
-
+class SearchViewModel(private val topHeadlineRepository: TopHeadlineRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<List<Article>>>(UiState.Loading)
 
     val uiState: StateFlow<UiState<List<Article>>> = _uiState
 
-    fun getTopHeadlineData(countryCode: String) {
+
+    fun fetchHeadlineNewsBySearch(query:String){
         viewModelScope.launch {
-            topHeadlineRepository.getTopHeadlines(countryCode,"")
+            topHeadlineRepository.getTopHeadlines("IN",query)
                 .catch { error ->
                     _uiState.value = UiState.Error(error.toString())
                 }
@@ -28,5 +28,6 @@ class TopHeadlineViewModel(private val topHeadlineRepository: TopHeadlineReposit
                 }
         }
     }
+
 
 }
