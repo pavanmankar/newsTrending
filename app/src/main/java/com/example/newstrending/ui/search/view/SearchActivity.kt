@@ -80,6 +80,9 @@ class SearchActivity : AppCompatActivity() {
             }
         })
         viewModel.fetchHeadlineNewsBySearch(query)
+        binding.eLayout.tryAgainBtn.setOnClickListener {
+            viewModel.fetchHeadlineNewsBySearch(query)
+        }
     }
 
 

@@ -42,6 +42,7 @@ class TopHeadlineActivity : AppCompatActivity() {
     @Inject
     lateinit var topHeadlineViewModel: TopHeadlineViewModel
     private lateinit var binding: ActivityTopHeadlineBinding
+    lateinit var category : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +58,8 @@ class TopHeadlineActivity : AppCompatActivity() {
     }
 
     private fun getIntentAndFetchData() {
-        val category = intent.getStringExtra(EXTRAS_COUNTRY)
-        category?.let {
+        category = intent.getStringExtra(EXTRAS_COUNTRY)!!
+        category.let {
             topHeadlineViewModel.getTopHeadlineData(it)
         }
     }
@@ -67,6 +68,11 @@ class TopHeadlineActivity : AppCompatActivity() {
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+        binding.eLayout.tryAgainBtn.setOnClickListener {
+            if(!category.isEmpty()){
+                topHeadlineViewModel.getTopHeadlineData(category)
+            }
+        }
     }
 
 
@@ -79,13 +85,16 @@ class TopHeadlineActivity : AppCompatActivity() {
                             binding.progressBar.visibility = View.GONE
                             renderList(it.data)
                             binding.recyclerView.visibility = View.VISIBLE
+                            binding.eLayout.errorLayout.visibility = View.GONE
                         }
                         is UiState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                             binding.recyclerView.visibility = View.GONE
+                            binding.eLayout.errorLayout.visibility = View.GONE
                         }
                         is UiState.Error -> {
                             binding.progressBar.visibility = View.GONE
+                            binding.eLayout.errorLayout.visibility = View.VISIBLE
                             Toast.makeText(this@TopHeadlineActivity, it.message, Toast.LENGTH_LONG)
                                 .show()
                         }

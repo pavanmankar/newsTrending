@@ -29,10 +29,7 @@ class SourceDetailActivity : AppCompatActivity() {
         const val EXTRAS_SOURCE_NAME = "EXTRAS_SOURCE_NAME"
         const val EXTRAS_LANGUAGE = "EXTRAS_LANGUAGE"
         fun getIntent(
-            context: Context,
-            category: String,
-            sourceName: String,
-            languageCode: String
+            context: Context, category: String, sourceName: String, languageCode: String
         ): Intent {
             return Intent(context, SourceDetailActivity::class.java).apply {
                 putExtra(EXTRAS_CATEGORY, category)
@@ -50,6 +47,9 @@ class SourceDetailActivity : AppCompatActivity() {
     @Inject
     lateinit var adapter: SourceHeadlineAdapter
 
+    lateinit var languageCode: String
+    lateinit var category: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySourceDetailBinding.inflate(layoutInflater)
@@ -63,18 +63,26 @@ class SourceDetailActivity : AppCompatActivity() {
     }
 
     private fun getIntentAndFetchData() {
-        val category = intent.getStringExtra(EXTRAS_CATEGORY)
+        category = intent.getStringExtra(EXTRAS_CATEGORY)!!
         val sourceName = intent.getStringExtra(EXTRAS_SOURCE_NAME)
-        val languageCode = intent.getStringExtra(EXTRAS_LANGUAGE)
-        category?.let {
-            if (!languageCode.isNullOrEmpty()) {
-                newSourceViewModel.fetchNewSources(it, languageCode)
-            }else {
-                newSourceViewModel.fetchNewSources(it, "")
-            }
-        }
+        languageCode = intent.getStringExtra(EXTRAS_LANGUAGE)!!
+        callApi()
         sourceName?.let {
             supportActionBar?.title = it
+        }
+        binding.eLayout.tryAgainBtn.setOnClickListener {
+            callApi()
+        }
+
+    }
+
+    private fun callApi() {
+        category.let {
+            if (!languageCode.isEmpty()) {
+                newSourceViewModel.fetchNewSources(it, languageCode)
+            } else {
+                newSourceViewModel.fetchNewSources(it, "")
+            }
         }
     }
 
@@ -99,13 +107,16 @@ class SourceDetailActivity : AppCompatActivity() {
                             binding.progressBar.visibility = View.GONE
                             renderList(it.data)
                             binding.recyclerView.visibility = View.VISIBLE
+                            binding.eLayout.errorLayout.visibility = View.GONE
                         }
                         is UiState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                             binding.recyclerView.visibility = View.GONE
+                            binding.eLayout.errorLayout.visibility = View.GONE
                         }
                         is UiState.Error -> {
                             binding.progressBar.visibility = View.GONE
+                            binding.eLayout.errorLayout.visibility = View.VISIBLE
                             Toast.makeText(this@SourceDetailActivity, it.message, Toast.LENGTH_LONG)
                                 .show()
                         }

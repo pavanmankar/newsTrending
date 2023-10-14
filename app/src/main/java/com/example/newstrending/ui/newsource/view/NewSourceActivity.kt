@@ -62,10 +62,13 @@ class NewSourceActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         adapter.itemClickListener = {
-            val intent = SourceDetailActivity.getIntent(this, it.category, it.name,"")
+            val intent = SourceDetailActivity.getIntent(this, it.category, it.name, "")
             startActivity(intent)
         }
         newSourceViewModel.fetchNewSources("", "")
+        binding.eLayout.tryAgainBtn.setOnClickListener {
+            newSourceViewModel.fetchNewSources("", "")
+        }
     }
 
     private fun setupObserver() {
@@ -77,13 +80,16 @@ class NewSourceActivity : AppCompatActivity() {
                             binding.progressBar.visibility = View.GONE
                             renderList(it.data)
                             binding.recyclerView.visibility = View.VISIBLE
+                            binding.eLayout.errorLayout.visibility = View.GONE
                         }
                         is UiState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                             binding.recyclerView.visibility = View.GONE
+                            binding.eLayout.errorLayout.visibility = View.GONE
                         }
                         is UiState.Error -> {
                             binding.progressBar.visibility = View.GONE
+                            binding.eLayout.errorLayout.visibility = View.VISIBLE
                             Toast.makeText(this@NewSourceActivity, it.message, Toast.LENGTH_LONG)
                                 .show()
                         }
