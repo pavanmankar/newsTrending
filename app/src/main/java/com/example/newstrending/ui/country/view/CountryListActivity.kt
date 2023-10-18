@@ -3,27 +3,26 @@ package com.example.newstrending.ui.country.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newstrending.NewsTrendingApplication
 import com.example.newstrending.data.model.CountryList
 import com.example.newstrending.databinding.ActivityCountryListBinding
-import com.example.newstrending.di.component.DaggerActivityComponent
-import com.example.newstrending.di.module.ActivityModule
+import com.example.newstrending.di.component.ActivityComponent
+import com.example.newstrending.ui.base.BaseActivity
 import com.example.newstrending.ui.base.UiState
 import com.example.newstrending.ui.country.viewmodel.CountryViewModel
 import com.example.newstrending.ui.topheadline.view.TopHeadlineActivity
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class CountryListActivity : AppCompatActivity() {
+class CountryListActivity : BaseActivity<CountryViewModel, ActivityCountryListBinding>() {
 
 
     companion object {
@@ -35,23 +34,12 @@ class CountryListActivity : AppCompatActivity() {
     @Inject
     lateinit var adapter: CountryListAdapter
 
-    @Inject
-    lateinit var countryViewModel: CountryViewModel
-    private lateinit var binding: ActivityCountryListBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityCountryListBinding.inflate(layoutInflater)
-        supportActionBar?.title = "Countries"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        setContentView(binding.root)
-        injectDependency()
-        setupObserver()
-        setupUI()
+    override fun injectDependencies(activityComponent: ActivityComponent) {
+        activityComponent.injectCountryListActivity(this)
     }
 
-    private fun setupUI() {
+    override fun setupView(savedInstanceState: Bundle?) {
+        setUpToolbar("Countries")
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.addItemDecoration(
@@ -67,21 +55,24 @@ class CountryListActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        countryViewModel.fetchCountryList(application)
+        viewModel.fetchCountryList(application)
         binding.eLayout.tryAgainBtn.setOnClickListener {
-            countryViewModel.fetchCountryList(application)
+            viewModel.fetchCountryList(application)
         }
     }
 
+    override fun setupViewBinding(inflater: LayoutInflater): ActivityCountryListBinding {
+        return ActivityCountryListBinding.inflate(inflater)
+    }
 
-    private fun setupObserver() {
+    override fun setupObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                countryViewModel.uiState.collect {
+                viewModel.data.collect {
                     when (it) {
                         is UiState.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            renderList(it.data)
+                            renderList(it.data as List<CountryList>)
                             binding.recyclerView.visibility = View.VISIBLE
                             binding.eLayout.errorLayout.visibility = View.GONE
                         }
@@ -113,11 +104,5 @@ class CountryListActivity : AppCompatActivity() {
             finish()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun injectDependency() {
-        DaggerActivityComponent.builder()
-            .applicationComponent((application as NewsTrendingApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().injectCountryListActivity(this)
     }
 }

@@ -3,26 +3,24 @@ package com.example.newstrending.ui.topheadline.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newstrending.NewsTrendingApplication
 import com.example.newstrending.data.model.Article
 import com.example.newstrending.databinding.ActivityTopHeadlineBinding
-import com.example.newstrending.di.component.DaggerActivityComponent
-import com.example.newstrending.di.module.ActivityModule
+import com.example.newstrending.di.component.ActivityComponent
+import com.example.newstrending.ui.base.BaseActivity
 import com.example.newstrending.ui.base.UiState
 import com.example.newstrending.ui.topheadline.viewmodel.TopHeadlineViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TopHeadlineActivity : AppCompatActivity() {
+class TopHeadlineActivity : BaseActivity<TopHeadlineViewModel, ActivityTopHeadlineBinding>() {
 
     companion object {
         const val EXTRAS_COUNTRY = "EXTRAS_COUNTRY"
@@ -36,56 +34,48 @@ class TopHeadlineActivity : AppCompatActivity() {
     @Inject
     lateinit var adapter: TopHeadlineAdapter
 
-    @Inject
-    lateinit var pagingAdapter: PagingTopHeadlineAdapter
+    lateinit var category: String
 
-    @Inject
-    lateinit var topHeadlineViewModel: TopHeadlineViewModel
-    private lateinit var binding: ActivityTopHeadlineBinding
-    lateinit var category : String
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityTopHeadlineBinding.inflate(layoutInflater)
-        supportActionBar?.title = "Top Headlines"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        setContentView(binding.root)
-        injectDependency()
+    override fun setupView(savedInstanceState: Bundle?) {
+        setUpToolbar("Top Headlines")
+        val recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+        binding.eLayout.tryAgainBtn.setOnClickListener {
+            if (!category.isEmpty()) {
+                viewModel.getTopHeadlineData(category)
+            }
+        }
         getIntentAndFetchData()
-        setupObserver()
-        setupUI()
+    }
+
+    override fun setupViewBinding(inflater: LayoutInflater): ActivityTopHeadlineBinding {
+        return ActivityTopHeadlineBinding.inflate(inflater)
+    }
+
+    override fun injectDependencies(activityComponent: ActivityComponent) {
+        activityComponent.injectTopHeadlineActivity(this)
     }
 
     private fun getIntentAndFetchData() {
         category = intent.getStringExtra(EXTRAS_COUNTRY)!!
         category.let {
-            topHeadlineViewModel.getTopHeadlineData(it)
+            viewModel.getTopHeadlineData(it)
         }
     }
 
-    private fun setupUI() {
-        val recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
-        binding.eLayout.tryAgainBtn.setOnClickListener {
-            if(!category.isEmpty()){
-                topHeadlineViewModel.getTopHeadlineData(category)
-            }
-        }
-    }
-
-
-    private fun setupObserver() {
+    override fun setupObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                topHeadlineViewModel.uiState.collect {
+                viewModel.data.collect {
                     when (it) {
                         is UiState.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            renderList(it.data)
                             binding.recyclerView.visibility = View.VISIBLE
                             binding.eLayout.errorLayout.visibility = View.GONE
+                            it.data?.let { newsList ->
+                                renderList(newsList as List<Article>)
+                            }
                         }
                         is UiState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
@@ -117,9 +107,5 @@ class TopHeadlineActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun injectDependency() {
-        DaggerActivityComponent.builder()
-            .applicationComponent((application as NewsTrendingApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().injectTopHeadlineActivity(this)
-    }
+
 }

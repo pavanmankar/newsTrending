@@ -3,27 +3,26 @@ package com.example.newstrending.ui.language.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newstrending.NewsTrendingApplication
 import com.example.newstrending.data.model.LanguageList
 import com.example.newstrending.databinding.ActivityLanguageBinding
-import com.example.newstrending.di.component.DaggerActivityComponent
-import com.example.newstrending.di.module.ActivityModule
+import com.example.newstrending.di.component.ActivityComponent
+import com.example.newstrending.ui.base.BaseActivity
 import com.example.newstrending.ui.base.UiState
 import com.example.newstrending.ui.language.viewmodel.LanguageViewModel
 import com.example.newstrending.ui.newsource.view.SourceDetailActivity
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class LanguageActivity : AppCompatActivity() {
+class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding>() {
 
     companion object {
         fun getIntent(context: Context): Intent {
@@ -34,29 +33,12 @@ class LanguageActivity : AppCompatActivity() {
     @Inject
     lateinit var adapter: LanguageListAdapter
 
-    @Inject
-    lateinit var languageViewModel: LanguageViewModel
-
-    private lateinit var binding: ActivityLanguageBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityLanguageBinding.inflate(layoutInflater)
-        supportActionBar?.title = "Language"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        setContentView(binding.root)
-        injectDependency()
-        getIntentAndFetchData()
-        setupObserver()
-        setupUI()
+    override fun injectDependencies(activityComponent: ActivityComponent) {
+        activityComponent.injectLanguageActivity(this)
     }
 
-    private fun getIntentAndFetchData() {
-
-    }
-
-    private fun setupUI() {
+    override fun setupView(savedInstanceState: Bundle?) {
+        setUpToolbar("Languages")
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -73,23 +55,28 @@ class LanguageActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        languageViewModel.fetchLanguageList(application)
+        viewModel.fetchLanguageList(application)
         binding.eLayout.tryAgainBtn.setOnClickListener {
-            languageViewModel.fetchLanguageList(application)
+            viewModel.fetchLanguageList(application)
         }
     }
 
+    override fun setupViewBinding(inflater: LayoutInflater): ActivityLanguageBinding {
+        return ActivityLanguageBinding.inflate(inflater)
+    }
 
-    private fun setupObserver() {
+    override fun setupObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                languageViewModel.uiState.collect {
+                viewModel.data.collect {
                     when (it) {
                         is UiState.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            renderList(it.data)
                             binding.recyclerView.visibility = View.VISIBLE
                             binding.eLayout.errorLayout.visibility = View.GONE
+                            it.data?.let { list ->
+                                renderList(list as List<LanguageList>)
+                            }
                         }
                         is UiState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
@@ -121,9 +108,4 @@ class LanguageActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun injectDependency() {
-        DaggerActivityComponent.builder()
-            .applicationComponent((application as NewsTrendingApplication).applicationComponent)
-            .activityModule(ActivityModule(this)).build().injectLanguageActivity(this)
-    }
 }
