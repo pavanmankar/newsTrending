@@ -30,10 +30,9 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
             return Intent(context, SearchActivity::class.java)
         }
     }
+
     @Inject
     lateinit var adapter: TopHeadlineAdapter
-
-    var query = ""
 
     private fun setUpListener() {
         binding.searchView.setOnQueryTextListener(object : OnQueryTextListener,
@@ -43,14 +42,12 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
             }
 
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                query = p0!!
-                viewModel.fetchHeadlineNewsBySearch(query)
+                viewModel.searchNews(p0!!)
                 return true
             }
         })
-        viewModel.fetchHeadlineNewsBySearch(query)
         binding.eLayout.tryAgainBtn.setOnClickListener {
-            viewModel.fetchHeadlineNewsBySearch(query)
+            viewModel.fetchHeadlineNewsBySearch()
         }
     }
 

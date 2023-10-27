@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
@@ -55,9 +54,9 @@ class CountryListActivity : BaseActivity<CountryViewModel, ActivityCountryListBi
             startActivity(intent)
         }
 
-        viewModel.fetchCountryList(application)
+        viewModel.fetchCountryList()
         binding.eLayout.tryAgainBtn.setOnClickListener {
-            viewModel.fetchCountryList(application)
+            viewModel.fetchCountryList()
         }
     }
 
@@ -98,11 +97,4 @@ class CountryListActivity : BaseActivity<CountryViewModel, ActivityCountryListBi
         adapter.notifyDataSetChanged()
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 }

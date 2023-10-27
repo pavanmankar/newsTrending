@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.newstrending.data.repository.CountryRepository
+import com.example.newstrending.data.repository.LanguageRepository
 import com.example.newstrending.data.repository.NewSourceRepository
 import com.example.newstrending.data.repository.TopHeadlineRepository
 import com.example.newstrending.di.ActivityContext
@@ -57,18 +59,10 @@ class ActivityModule(private val activity:AppCompatActivity) {
     }
 
     @Provides
-    fun provideCountryViewModel() : CountryViewModel{
-        return ViewModelProvider(activity,
-            ViewModelProviderFactory(CountryViewModel::class){
-                CountryViewModel()
-            })[CountryViewModel::class.java]
-    }
-
-    @Provides
-    fun provideLanguageViewModel() : LanguageViewModel{
+    fun provideLanguageViewModel(languageRepository: LanguageRepository) : LanguageViewModel{
         return ViewModelProvider(activity,
             ViewModelProviderFactory(LanguageViewModel::class){
-                LanguageViewModel()
+                LanguageViewModel(languageRepository)
             })[LanguageViewModel::class.java]
     }
 
@@ -78,6 +72,14 @@ class ActivityModule(private val activity:AppCompatActivity) {
             ViewModelProviderFactory(SearchViewModel::class){
                 SearchViewModel(topHeadlineRepository)
             })[SearchViewModel::class.java]
+    }
+
+    @Provides
+    fun provideCountryViewModel(countryRepository: CountryRepository) : CountryViewModel{
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(CountryViewModel::class){
+                CountryViewModel(countryRepository)
+            })[CountryViewModel::class.java]
     }
 
 

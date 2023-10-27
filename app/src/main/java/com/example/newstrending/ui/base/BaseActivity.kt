@@ -2,6 +2,7 @@ package com.example.newstrending.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.example.newstrending.NewsTrendingApplication
@@ -53,6 +54,13 @@ abstract class BaseActivity <T : BaseViewModel<*>, ViewBindingType : ViewBinding
         _binding = null
         super.onDestroy()
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
