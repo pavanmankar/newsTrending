@@ -38,6 +38,7 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
         binding.searchView.setOnQueryTextListener(object : OnQueryTextListener,
             SearchView.OnQueryTextListener {
             override fun onQueryTextChange(p0: String?): Boolean {
+                viewModel.searchNews(p0!!)
                 return true
             }
 
@@ -100,13 +101,5 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
     private fun renderList(articleList: List<Article>) {
         adapter.addData(articleList)
         adapter.notifyDataSetChanged()
-    }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

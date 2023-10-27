@@ -25,24 +25,20 @@ class SearchViewModel(private val topHeadlineRepository: TopHeadlineRepository) 
 
     fun fetchHeadlineNewsBySearch() {
         viewModelScope.launch {
-            searchQuery.debounce(AppConstant.DEBOUNCE_TIMEOUT)
-                .filter {
+            searchQuery.debounce(AppConstant.DEBOUNCE_TIMEOUT).filter {
                     if (it.isNotEmpty() && it.length >= 3) {
                         return@filter true
                     } else {
-                        _data.value = UiState.Success(emptyArray<Article>() as List<*>)
+                        _data.value = UiState.Success(emptyList<Article>())
                         return@filter false
                     }
-                }
-                .distinctUntilChanged()
-                .flatMapLatest {
+                }.distinctUntilChanged().flatMapLatest {
+                    _data.value = UiState.Loading
                     return@flatMapLatest topHeadlineRepository.getTopHeadlines("IN", it)
                         .catch { error ->
                             _data.value = UiState.Error(error.toString())
                         }
-                }
-                .flowOn(Dispatchers.IO)
-                .collect {
+                }.flowOn(Dispatchers.IO).collect {
                     _data.value = UiState.Success(it)
                 }
         }
