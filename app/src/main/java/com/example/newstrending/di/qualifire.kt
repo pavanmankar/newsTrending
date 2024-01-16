@@ -13,3 +13,6 @@ annotation class ActivityContext
 @Qualifier
 @Retention(AnnotationRetention.SOURCE)
 annotation class BaseUrl
+
+@Qualifier
+annotation class DbName

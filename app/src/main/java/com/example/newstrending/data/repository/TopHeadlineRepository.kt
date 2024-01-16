@@ -1,43 +1,44 @@
 package com.example.newstrending.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.liveData
 import com.example.newstrending.data.api.NetworkService
+import com.example.newstrending.data.database.entity.articleToDbArticle
+import com.example.newstrending.data.database.entity.dbArticleToArticle
+import com.example.newstrending.data.database.service.TopHeadline.TopHeadlineDbService
 import com.example.newstrending.data.model.Article
-import com.example.newstrending.ui.base.PaggingSource
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import okhttp3.Dispatcher
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TopHeadlineRepository @Inject constructor(private val networkService: NetworkService) {
+class TopHeadlineRepository @Inject constructor(
+    private val networkService: NetworkService,
+    private val topHeadlineDbService: TopHeadlineDbService
+) {
 
-    fun getTopHeadlines(country: String,query:String): Flow<List<Article>> {
+    @OptIn(FlowPreview::class)
+    fun getTopHeadlines(country: String, query: String): Flow<List<Article>> {
         return flow {
-            emit(networkService.getTopHeadlines(country,query))
+            emit(networkService.getTopHeadlines(country, query))
         }.map {
             it.articles
-        }.flowOn(Dispatchers.Default)
-    }
-
-    fun loadData(country : String) : Flow<List<Article>> {
-        return flow<List<Article>> {
-            Pager(
-                config = PagingConfig(pageSize = 10, maxSize = 100),
-                pagingSourceFactory = { PaggingSource(networkService,country) }
-            )
+        }.flatMapConcat<List<Article>, List<Article>> {
+            flow {
+                topHeadlineDbService.deleteAllArticles()
+                topHeadlineDbService.insertTopHeadlines(it.articleToDbArticle())
+            }
+        }.flatMapConcat {
+             topHeadlineDbService.getArticles()
+        }.flatMapConcat {
+           flow { it.dbArticleToArticle() }
         }
     }
 
-    fun getQuotes(country: String) = Pager(
-        config = PagingConfig(pageSize = 10, maxSize = 100),
-        pagingSourceFactory = { PaggingSource(networkService,country) }
-    ).flow
+    fun getTopHeadlinesFromDb(): Flow<List<Article>> {
+        return flow { topHeadlineDbService.getArticles() }
+    }
 
 }

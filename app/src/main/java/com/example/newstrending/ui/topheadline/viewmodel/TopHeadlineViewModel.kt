@@ -7,10 +7,7 @@ import com.example.newstrending.data.repository.TopHeadlineRepository
 import com.example.newstrending.ui.base.BaseViewModel
 import com.example.newstrending.ui.base.UiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class TopHeadlineViewModel(private val topHeadlineRepository: TopHeadlineRepository) : BaseViewModel<List<*>>() {
@@ -28,6 +25,17 @@ class TopHeadlineViewModel(private val topHeadlineRepository: TopHeadlineReposit
                     _data.value = UiState.Success(it)
                 }
         }
+
+//        viewModelScope.launch {
+//            topHeadlineRepository.getTopHeadlinesFromDb()
+//                .flowOn(Dispatchers.IO)
+//                .catch {
+//                    _data.value = UiState.Error("Something went wrong")
+//                }
+//                .collect{
+//                    _data.value = UiState.Success(it)
+//                }
+//        }
     }
 
 }
