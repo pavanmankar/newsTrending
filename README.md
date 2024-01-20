@@ -2,34 +2,6 @@
 This repository contains a sample app that implements MVVM architecture using Kotlin, Dagger,
 Retrofit, Coroutines, Flow, StateFlow, etc.
 
-
-## Using Library in your Android application
-
-Update your settings.gradle file with the following dependency.
-
-```groovy
-dependencyResolutionManagement {
-		repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-		repositories {
-			mavenCentral()
-			maven { url 'https://jitpack.io' }
-		}
-	}
-```
-
-Update your module level build.gradle file with the following dependency.
-
-```groovy
-dependencies {
-    implementation 'com.github.pavanmankar:newsTrending:Tag'
-}
-```
-Do not forget to add internet permission in manifest if already not present
-
-```
-<uses-permission android:name="android.permission.INTERNET" />
-```
-
 ## Major Highlights
 
 - MVVM Architecture
