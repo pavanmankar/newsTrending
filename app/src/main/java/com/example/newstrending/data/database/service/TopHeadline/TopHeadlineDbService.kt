@@ -8,8 +8,8 @@ import javax.inject.Singleton
 @Singleton
 interface TopHeadlineDbService {
 
-    suspend fun insertTopHeadlines(articles: List<DbArticle>)
-    suspend fun getArticles(): Flow<List<DbArticle>>
-    suspend fun deleteAllArticles()
+     fun insertTopHeadlines(articles: List<DbArticle>)
+     fun getArticles(): Flow<List<DbArticle>>
+     fun deleteAllArticles()
 
 }

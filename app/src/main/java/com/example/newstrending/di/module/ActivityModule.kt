@@ -9,6 +9,7 @@ import com.example.newstrending.data.repository.LanguageRepository
 import com.example.newstrending.data.repository.NewSourceRepository
 import com.example.newstrending.data.repository.TopHeadlineRepository
 import com.example.newstrending.di.ActivityContext
+import com.example.newstrending.di.ApplicationContext
 import com.example.newstrending.ui.base.ViewModelProviderFactory
 import com.example.newstrending.ui.country.view.CountryListAdapter
 import com.example.newstrending.ui.country.viewmodel.CountryViewModel
@@ -22,6 +23,8 @@ import com.example.newstrending.ui.search.viewmodel.SearchViewModel
 import com.example.newstrending.ui.topheadline.view.PagingTopHeadlineAdapter
 import com.example.newstrending.ui.topheadline.view.TopHeadlineAdapter
 import com.example.newstrending.ui.topheadline.viewmodel.TopHeadlineViewModel
+import com.example.newstrending.util.DefaultNetworkHelper
+import com.example.newstrending.util.NetworkHelper
 import dagger.Module
 import dagger.Provides
 
@@ -35,6 +38,11 @@ class ActivityModule(private val activity:AppCompatActivity) {
     }
 
     @Provides
+    fun provideNetworkHelper(): NetworkHelper {
+        return DefaultNetworkHelper(activity)
+    }
+
+    @Provides
     fun provideHomeViewModel() : HomeViewModel{
         return ViewModelProvider(activity,
             ViewModelProviderFactory(HomeViewModel::class) {
@@ -43,10 +51,10 @@ class ActivityModule(private val activity:AppCompatActivity) {
     }
 
     @Provides
-    fun provideTopHeadlineViewModel(topHeadlineRepository: TopHeadlineRepository) : TopHeadlineViewModel{
+    fun provideTopHeadlineViewModel(topHeadlineRepository: TopHeadlineRepository, networkHelper: NetworkHelper) : TopHeadlineViewModel{
         return ViewModelProvider(activity,
         ViewModelProviderFactory(TopHeadlineViewModel::class){
-            TopHeadlineViewModel(topHeadlineRepository)
+            TopHeadlineViewModel(topHeadlineRepository,networkHelper)
         })[TopHeadlineViewModel::class.java]
     }
 

@@ -10,17 +10,16 @@ import javax.inject.Inject
 
 class TopHeadlineDbServiceImpl @Inject constructor(private val newsDatabase: NewsDatabase) : TopHeadlineDbService {
 
-    override suspend fun insertTopHeadlines(articles: List<DbArticle>) {
+    override  fun insertTopHeadlines(articles: List<DbArticle>) {
         newsDatabase.articleDao().insertAll(articles)
     }
 
-    @OptIn(FlowPreview::class)
-    override suspend fun getArticles(): Flow<List<DbArticle>> {
+    override  fun getArticles(): Flow<List<DbArticle>> {
         return newsDatabase.articleDao().getAllArticles()
 
     }
 
-    override suspend fun deleteAllArticles() {
+    override  fun deleteAllArticles() {
         newsDatabase.articleDao().deleteAll()
     }
 }

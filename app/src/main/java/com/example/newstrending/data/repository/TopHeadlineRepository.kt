@@ -25,20 +25,21 @@ class TopHeadlineRepository @Inject constructor(
             emit(networkService.getTopHeadlines(country, query))
         }.map {
             it.articles
-        }.flatMapConcat<List<Article>, List<Article>> {
+        }.flatMapConcat {
             flow {
                 topHeadlineDbService.deleteAllArticles()
                 topHeadlineDbService.insertTopHeadlines(it.articleToDbArticle())
+                emit(Unit)
             }
         }.flatMapConcat {
-             topHeadlineDbService.getArticles()
-        }.flatMapConcat {
-           flow { it.dbArticleToArticle() }
+            topHeadlineDbService.getArticles()
+        }.map {
+            it.dbArticleToArticle()
         }
     }
 
     fun getTopHeadlinesFromDb(): Flow<List<Article>> {
-        return flow { topHeadlineDbService.getArticles() }
+        return topHeadlineDbService.getArticles().map { it.dbArticleToArticle() }
     }
 
 }
