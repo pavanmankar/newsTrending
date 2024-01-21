@@ -6,7 +6,7 @@ Retrofit, Coroutines, Flow, StateFlow, etc.
 
 - MVVM Architecture
 - Kotlin
-- Dagger Hilt
+- Dagger2
 - Retrofit
 - Coroutines
 - Flows
@@ -14,7 +14,7 @@ Retrofit, Coroutines, Flow, StateFlow, etc.
 - View binding
 - Unit Test
 
-#### The app contains following packages:
+#### The app contains the following packages:
 1. **data**: It contains all the data accessing and manipulating components.
 2. **di**: Dependency providing classes using Dagger2.
 3. **ui**: View classes along with their corresponding ViewModel.
